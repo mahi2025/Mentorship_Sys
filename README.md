@@ -20,25 +20,25 @@ Backend: Node.js, TypeScript, Express.js
 Database: PostgresSql, prisma ORM
 
 # Project Structure
-src/ 
-│ 
 
-├── config/ 
+│ src/ 
 
-├── prisma/ 
+    ├── config/ 
 
-├── modules/ 
+    ├── prisma/ 
 
-│  ├── users/
+    ├── modules/ 
 
-├── Shared/ 
+    │       ├── users/
 
-│  ├── middleware/
+    ├── Shared/ 
 
-|  |── utils/
+    │       ├── middleware/
 
-├── app.ts 
+    |       |── utils/
 
-└── index.ts
+    ├── app.ts 
+
+    └── index.ts
 
 
