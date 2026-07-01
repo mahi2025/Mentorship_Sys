@@ -1,0 +1,25 @@
+{
+  "name": "mentorship_sys",
+  "version": "1.0.0",
+  "description": "A scalable backend API for a mentorship platform where mentors can create services, define their availability, receive bookings, collect payments, and receive reviews. Mentees can browse mentors, book sessions, make payments, and receive notifications.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.22.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.0",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
