@@ -18,7 +18,7 @@ The Mentorship System provides an online platform connecting mentors with mentee
 
 # Tech Stack
 Backend: Node.js, TypeScript, Express.js
-Database: PostgresSql, prisma ORM
+Database: PostgresSql
 
 # Project Structure
 
@@ -28,11 +28,7 @@ Database: PostgresSql, prisma ORM
 
 │──src/ 
  
-    ├── modules/ 
-    │  ├── users/
-    ├── Shared/ 
-    │  ├── middleware/
-    |  |── utils/
+    ├── config/ 
     ├── app.ts 
     └── index.ts
 
