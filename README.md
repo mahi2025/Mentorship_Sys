@@ -38,9 +38,4 @@ Database: PostgresSql
 │
 └── modules/
     ├── user/
-    ├── mentor/
-    ├── booking/
-    ├── payment/
-    ├── review/
-    ├── notification/
     └── auth/
