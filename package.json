@@ -2,9 +2,16 @@
   "name": "mentorship_sys",
   "version": "1.0.0",
   "description": "A scalable backend API for a mentorship platform where mentors can create services, define their availability, receive bookings, collect payments, and receive reviews. Mentees can browse mentors, book sessions, make payments, and receive notifications.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+     "build": "tsc",
+
+    "migration:create": "tsx src/scripts/create-migration.ts",
+    "migrate": "tsx src/scripts/migrate.ts",
+    "rollback": "tsx src/scripts/rollback.ts",
+
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +19,10 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "glob": "^13.0.6",
+    "kysely": "^0.28.17",
     "pg": "^8.22.0",
+    "tslint": "^5.20.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -21,5 +31,10 @@
     "@types/pg": "^8.20.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
-  }
+  },
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
+  "typings": "./lib/index.d.ts"
 }
