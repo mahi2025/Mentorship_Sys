@@ -1,6 +1,8 @@
 import { UserRepository } from "./user.repository";
 import { CreateUserDTO } from "./user.types";
 import { createUserSchema } from "./user.validation";
+import { AppError } from "../../shared/errors/AppError";
+
 
 export class UserService {
   constructor(private repo = new UserRepository()) {}
@@ -11,7 +13,7 @@ export class UserService {
 
     const existing = await this.repo.getUserByEmail(data.email);
     if (existing) {
-      throw new Error("User already exists");
+      throw new AppError("User already exists");
     }
 
 

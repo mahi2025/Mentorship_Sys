@@ -17,6 +17,7 @@ The Mentorship System provides an online platform connecting mentors with mentee
 # Tech Stack
 Backend: Node.js, TypeScript, Express.js
 Database: PostgresSql
+Better Auth
 
 # Project Structure
 
