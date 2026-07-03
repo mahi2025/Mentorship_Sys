@@ -1,5 +1,7 @@
 import { betterAuth } from "better-auth";
-import { db } from "../config/kysely";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const auth = betterAuth({
   emailAndPassword: {

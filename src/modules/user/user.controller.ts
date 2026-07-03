@@ -13,7 +13,7 @@ export class UserController {
   }
 
   async getUser(req: Request, res: Response) {
-  ApiResponse.success(res, user, "User retrieved successfully");
+  ApiResponse.success(res, "User retrieved successfully");
   }
 
   async getAllUsers(req: Request, res: Response) {

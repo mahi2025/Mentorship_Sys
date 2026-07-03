@@ -1,6 +1,5 @@
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
-
 import { env } from "./env";
 import type { Database } from "../database/types";
 
