@@ -40,3 +40,9 @@ Better Auth
 └── modules/
     ├── user/
     └── auth/
+
+
+npm run migrate
+    https://xxxx.ngrok-free.app/api/auth/callback/google
+
+    npm run migration:create create_users

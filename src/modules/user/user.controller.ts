@@ -3,7 +3,6 @@ import { UserService } from "./user.service";
 import { ApiResponse } from "../../shared/apiResponse";
 
 
-
 const service = new UserService();
 
 export class UserController {

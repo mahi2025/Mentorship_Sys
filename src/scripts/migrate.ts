@@ -5,10 +5,6 @@ import { Migrator, FileMigrationProvider } from "kysely";
 
 import { db } from "../config/kysely";
 
-
-/*
-add_google_provider_to_users.ts
-*/
 async function migrate() {
   const migrator = new Migrator({
     db,
