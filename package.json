@@ -8,6 +8,7 @@
     "build": "tsc",
     "migration:create": "tsx src/scripts/create-migration.ts",
     "migrate": "tsx src/scripts/migrate.ts",
+    "migrate:auth": "npx @better-auth/cli migrate",
     "rollback": "tsx src/scripts/rollback.ts",
     "typecheck": "tsc --noEmit"
   },

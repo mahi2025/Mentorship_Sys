@@ -1,24 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { fromNodeHeaders } from 'better-auth/node';
+import { auth } from '../auth/auth';
 
-export function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  const header = req.headers.authorization;
-
-  if (!header) {
-    return res.status(401).json({ message: "No token provided" });
+/*
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+  if (!session?.user) {
+    return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Not authenticated' } });
   }
+  req.user = session.user;
+  next();
+};
 
-  const token = header.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    (req as any).user = decoded;
-    next();
-  } catch {
-    return res.status(401).json({ message: "Invalid token" });
-  }
-}
+*/

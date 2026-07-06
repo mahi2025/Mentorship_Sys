@@ -20,8 +20,8 @@ const filePath = path.join(
   fileName,
 );
 
-const template = `import { Kysely } from "kysely";
-import type { Database } from "../types/database";
+const template = `import { Kysely, sql } from "kysely";
+import type { Database } from "../database/type";
 
 export async function up(db: Kysely<Database>): Promise<void> {
 

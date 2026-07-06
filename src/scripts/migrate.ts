@@ -2,7 +2,6 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { Migrator, FileMigrationProvider } from "kysely";
-
 import { db } from "../config/kysely";
 
 async function migrate() {
@@ -13,10 +12,13 @@ async function migrate() {
       fs,
       path,
       migrationFolder: path.join(
+          /*
         process.cwd(),
         "src",
         "database",
         "migrations",
+        */
+        __dirname, 'database/migrations'
       ),
     }),
   });
@@ -26,10 +28,6 @@ async function migrate() {
   results?.forEach((result) => {
     if (result.status === "Success") {
       console.log(` ${result.migrationName}`);
-    }
-
-    if (result.status === "Error") {
-      console.error(` ${result.migrationName}`);
     }
   });
 

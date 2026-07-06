@@ -1,21 +1,18 @@
 import express from "express";
-import { auth } from "./lib/auth";
-
-
-import userRoutes from "./modules/user/user.routes";
-import authRoutes from "./modules/auth/auth.routes";
-
-
+import { auth } from "./auth/auth";
+import { toNodeHandler } from "better-auth/node";
 import { errorHandler } from "./shared/errors/errorHandler";
-const app = express();
+
+
+export const app = express();
 
 app.use(express.json());
+app.use("/api/auth/{*path}", toNodeHandler(auth));
 
-app.use("/api/auth/", auth.handler);
+//app.use("/", Routes);
 
-app.use("/users", userRoutes);
-app.use("/auth", authRoutes);
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+
 
 app.use(errorHandler);
 
-export default app;
