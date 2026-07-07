@@ -1,10 +1,10 @@
 import { betterAuth, facebook } from "better-auth";
-import { pool } from "../config/db_pool";
+import { pool } from "../config/database";
 import { PostgresDialect } from 'kysely';
 
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.BETTER_AUTH_URL!,
   database: {
     dialect: new PostgresDialect({ pool }),
     type: "postgres",
@@ -23,17 +23,6 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-
-  /*
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-        defaultValue: "mentee",
-        input: false,
-      },
-    },
-*/
     /*
     hooks: {
       afterCreate: async ({ user, db }) => {
