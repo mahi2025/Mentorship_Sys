@@ -1,18 +1,31 @@
-import { Request, Response } from "express";
-import { AuthService } from "./auth.service";
+import type { Request, Response, NextFunction } from "express";
+import { auth } from "../../auth/auth";
+import { ProfileService } from "../profile/profile.service";
+import { signUpSchema } from "./auth.validation";
 
-const service = new AuthService();
+const profileService = new ProfileService();
 
-export class AuthController {
-  async register(req: Request, res: Response) {
-    const user = await service.register(req.body);
+export async function signUp(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email, password, name } = signUpSchema.parse(req.body);
 
-    res.status(201).json(user);
-  }
+    const resolvedName = name ?? email.split("@")[0];
 
-  async login(req: Request, res: Response) {
-    const result = await service.login(req.body);
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: resolvedName,
+        email,
+        password,
+      },
+    });
 
-    res.json(result);
+    await profileService.createProfile(result.user.id);
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: result.user,
+    });
+  } catch (error) {
+    next(error);
   }
 }
