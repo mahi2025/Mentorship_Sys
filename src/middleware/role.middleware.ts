@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-export const requireRole = (...allowed: string[]) =>
+export const roleMiddleware = (...allowedRoles: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !allowed.includes((req.user as any).role)) {
-      return res.status(403).json({ error: { code: 'FORBIDDEN', message:  } });
+
+    const role = (req.user as any)?.role;
+
+    if (!role|| !allowedRoles.includes(role)) {
+      return res.status(403).json({
+         error: "Forbidden"
+       });
     }
     next();
   };
-
-//For a project this size, a plain role field + your own
-//requireRole middleware is the right amount of complexity

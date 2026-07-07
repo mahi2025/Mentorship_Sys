@@ -18,6 +18,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "better-auth": "^1.6.23",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "glob": "^13.0.6",

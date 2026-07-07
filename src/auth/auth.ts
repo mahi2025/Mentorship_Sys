@@ -4,7 +4,7 @@ import { PostgresDialect } from 'kysely';
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URl,
+  baseURL: process.env.BETTER_AUTH_URL,
   database: {
     dialect: new PostgresDialect({ pool }),
     type: "postgres",
@@ -14,7 +14,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    autoSignIn: true
+    autoSignIn: true,
   },
 
   socialProviders: {
@@ -23,7 +23,8 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  
+
+  /*
   user: {
     additionalFields: {
       role: {
@@ -32,5 +33,22 @@ export const auth = betterAuth({
         input: false,
       },
     },
-  },
+*/
+    /*
+    hooks: {
+      afterCreate: async ({ user, db }) => {
+        await db
+          .insertInto("profile")
+          .values({
+            user_id: user.id,
+            headline: "",
+            bio: "",
+            location: "",
+          })
+          .execute();
+      },
+    },
+    */
 });
+
+

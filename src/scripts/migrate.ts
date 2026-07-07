@@ -12,13 +12,10 @@ async function migrate() {
       fs,
       path,
       migrationFolder: path.join(
-          /*
         process.cwd(),
         "src",
         "database",
         "migrations",
-        */
-        __dirname, 'database/migrations'
       ),
     }),
   });
