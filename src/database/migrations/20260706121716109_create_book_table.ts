@@ -1,33 +1,42 @@
-import { Kysely } from "kysely";
-import type { DB } from "../types";
+import { Kysely, sql } from "kysely";
+import type { DB } from "../schema";
 
 export async function up(db: Kysely<DB>): Promise<void> {
-    await db.schema
-      .createTable("booking")
-      .addColumn("id", "serial", (col) => col.primaryKey())
+  await sql`
+    CREATE TYPE booking_status AS ENUM (
+      'pending',
+      'confirmed',
+      'completed',
+      'cancelled'
+    );
+  `.execute(db);
 
-      .addColumn("mentee_id", "text", (col) =>
-        col.notNull().references("user.id").onDelete("cascade"),
-      )
-
-      .addColumn("service_id", "integer", (col) =>
-        col.notNull().references("service.id").onDelete("cascade"),
-      )
-
-      .addColumn("timeslot", "timestamptz", (col) => col.notNull())
-
-      .addColumn("status", "text", (col) => col.defaultTo("pending").notNull())
-
-      .addColumn("meeting_platform", "text")
-
-      .addColumn("meeting_link", "text")
-      // created_at: Generated<Date>;
-      //updated_at: Generated<Date>;
-      .execute();
+  await db.schema
+    .createTable("booking")
+    .addColumn("id", "serial", (col) => col.primaryKey())
+    .addColumn("mentee_id", "text", (col) => col.notNull())
+    .addColumn("service_id", "integer", (col) =>
+      col.notNull().references("service.id").onDelete("cascade"),
+    )
+    .addColumn("timeslot", "timestamptz", (col) => col.notNull())
+    .addColumn("status", sql`booking_status`, (col) =>
+      col.notNull().defaultTo("pending"),
+    )
+    .addColumn("meeting_platform", "text")
+    .addColumn("meeting_link", "text")
+    .addColumn("created_at", "timestamptz", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
+    )
+    .addColumn("updated_at", "timestamptz", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
+    )
+    .execute();
 }
 
 export async function down(db: Kysely<DB>): Promise<void> {
-    await db.schema
-    .dropTable("booking")
-    .execute();
+  await db.schema.dropTable("booking").execute();
+
+  await sql`
+    DROP TYPE booking_status;
+  `.execute(db);
 }
