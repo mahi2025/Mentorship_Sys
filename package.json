@@ -2,24 +2,42 @@
   "name": "mentorship_sys",
   "version": "1.0.0",
   "description": "A scalable backend API for a mentorship platform where mentors can create services, define their availability, receive bookings, collect payments, and receive reviews. Mentees can browse mentors, book sessions, make payments, and receive notifications.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "migration:create": "tsx src/scripts/create-migration.ts",
+    "migrate": "tsx src/scripts/migrate.ts",
+    "migrate:auth": "npx @better-auth/cli migrate",
+    "rollback": "tsx src/scripts/rollback.ts",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-auth": "^1.6.23",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "glob": "^13.0.6",
+    "jsonwebtoken": "^9.0.3",
+    "kysely": "^0.28.17",
     "pg": "^8.22.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.0",
     "@types/pg": "^8.20.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
-  }
+  },
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
+  "typings": "./lib/index.d.ts"
 }
