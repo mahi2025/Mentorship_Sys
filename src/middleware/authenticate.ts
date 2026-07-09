@@ -1,7 +1,7 @@
-
-//session/JWT check
 import type { Request, Response, NextFunction } from "express";
+import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../auth/auth";
+import { AppError } from "../shared/errors/AppError";
 
 export async function authenticate(
   req: Request,
@@ -9,32 +9,17 @@ export async function authenticate(
   next: NextFunction,
 ) {
   try {
-     // Get session token from cookies
-    const sessionToken = req.cookies["better-auth-session"];
-
-    if (!sessionToken) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
-
-    // Validate session with Better Auth
     const session = await auth.api.getSession({
-      headers: {
-        cookie: `better-auth-session=${sessionToken}`,
-      },
+      headers: fromNodeHeaders(req.headers),
     });
 
     if (!session) {
-      return res.status(401).json({ message: "Invalid session" });
+      return next(new AppError("Unauthorized", 401));
     }
 
-    // Attach user to request
-    (req as any).user = {
-      id: session.user.id,
-      email: session.user.email,
-    };
-
+    req.user = session.user;
     next();
-  } catch (error) {
-    return res.status(401).json({ message: "Authentication failed" });
+  } catch {
+    return next(new AppError("Unauthorized", 401));
   }
 }
