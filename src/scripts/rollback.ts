@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { Migrator, FileMigrationProvider } from "kysely";
 
-import { db } from "../config/kysely";
+import { db } from "../config/database";
 
 async function rollback() {
   const migrator = new Migrator({
