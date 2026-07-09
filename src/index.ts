@@ -1,9 +1,9 @@
-import { app } from "./App";
+import app from "./app";
 import { env} from "./config/env";
 import { connectDB } from "./config/database";
 
 
-const startServer = async () => {
+const start = async () => {
   await connectDB();
 
   app.listen(env.PORT, () => {
@@ -11,4 +11,4 @@ const startServer = async () => {
   });
 };
 
-startServer();
+start();

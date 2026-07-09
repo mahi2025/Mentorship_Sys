@@ -1,19 +1,20 @@
 import express from "express";
-import { auth } from "./auth/auth";
 import { toNodeHandler } from "better-auth/node";
-import { errorHandler } from "./shared/errors/errorHandler";
+import { auth } from "./auth/auth";
 import authRoutes from "./modules/auth/auth.routes";
-import profileRoutes from "./modules/profile/profile.routes";
+import profileRoutes from "./modules/profiles/profiles.routes";
+import { errorHandler } from "./middleware/error-handler";
 
 
-export const app = express();
+const app = express();
 
 app.use(express.json());
 
-app.get("/health", healthRouter);
-app.use("/api/auth/{*path}", toNodeHandler(auth));
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/profiles", profileRouter);
 
+app.use("/api/auth", toNodeHandler(auth));
 app.use(errorHandler);
+app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
+
+export default app;
