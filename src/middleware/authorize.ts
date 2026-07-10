@@ -3,12 +3,22 @@ import { Request, Response, NextFunction } from "express";
 export const authorize =
   (...allowedRoles: string[]) =>
   (req: Request, res: Response, next: NextFunction) => {
-    const role = (req.user as any)?.role;
+    const userRoles = req.user?.roles;
 
-    if (!role || !allowedRoles.includes(role)) {
-      return res.status(403).json({
-        error: "Forbidden",
-      });
-    }
-    next();
+
+  if (!userRoles) {
+    return res.status(403).json({
+      message: "Forbidden",
+    });
+  }
+
+  const allowed = allowedRoles.some((role) => userRoles.includes(role));
+
+   if (!allowed) {
+     return res.status(403).json({
+       message: "You don't have permission",
+     });
+   }
+
+   next();
   };
