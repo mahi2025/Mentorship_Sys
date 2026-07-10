@@ -8,4 +8,6 @@ router.get("/me", authenticate, getMyProfile);
 
 router.patch("/me", authenticate, updateMyProfile);
 
+//router.get("/:userId", getProfile);
+
 export default router;
