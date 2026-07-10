@@ -1,6 +1,10 @@
 import { pool } from "../config/database";
 import { PostgresDialect } from "kysely";
 import { betterAuth } from "better-auth";
+import { ProfilesService } from "../modules/profiles/profiles.service";
+
+
+const profilesService = new ProfilesService();
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
@@ -19,6 +23,26 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
+  databaseHooks: {
+
+    user: {
+
+      create: {
+
+        after: async (user) => {
+
+          console.log(
+            "New user created:",
+            user.id
+          );
+
+          await profilesService.createDefaultProfile(
+            user.id
+          );
+        },
+      },
     },
   },
 });
