@@ -1,21 +1,24 @@
+import requestlogger from "./middleware/Logger";
+import { errorHandler } from "./middleware/error-handler";
 import express from "express";
+import healthRoutes from "./modules/check/health.routes";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth/auth";
-import authRoutes from "./modules/auth/auth.routes";
 import profileRoutes from "./modules/profiles/profiles.routes";
-import { errorHandler } from "./middleware/error-handler";
-import healthRoutes from "./modules/check/health.routes";
 import { createGlobalLimiter } from "./middleware/rateLimit.middleware";
+import { createAuthLimiter } from "./middleware/rateLimit.middleware";
 
 const app = express();
 
+
 app.use(express.json());
+app.use(requestlogger);
+
 app.use(createGlobalLimiter());
 
 app.use("/api/health", healthRoutes);
+app.use(createAuthLimiter());
 app.use("/api/auth", toNodeHandler(auth));
-//app.use("/api/auth", authRoutes);
-
 app.use("/api/profile", profileRoutes);
 
 app.use(errorHandler);
