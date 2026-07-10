@@ -3,9 +3,8 @@ import { signUp } from "./auth.controller";
 import { createAuthLimiter } from "../../middleware/rateLimit.middleware";
 
 const router = Router();
-const authlimiter = createAuthLimiter();
 
-router.post("/sign-up", authlimiter, signUp);
+//router.post("/sign-up", authlimiter, signUp);
 
 //router.post("/login", authenticate, authLimiter, login);
 
