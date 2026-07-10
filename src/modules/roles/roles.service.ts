@@ -1,3 +1,4 @@
+/*
 import { db } from "../../config/database";
 import { AppError } from "../../shared/errors/AppError";
 import type { RoleName } from "./roles.types";
@@ -65,3 +66,4 @@ export class RolesService {
     return roleNames.some((role) => roles.includes(role));
   }
 }
+*/
