@@ -1,6 +1,7 @@
 import { pool } from "../config/database";
 import { PostgresDialect } from "kysely";
 import { betterAuth } from "better-auth";
+import logger from "../config/logger";
 import { ProfilesService } from "../modules/profiles/profiles.service";
 
 
@@ -26,23 +27,22 @@ export const auth = betterAuth({
     },
   },
   databaseHooks: {
-
     user: {
-
       create: {
-
         after: async (user) => {
+          console.log("New user created:", user.id);
 
-          console.log(
-            "New user created:",
-            user.id
-          );
-
-          await profilesService.createDefaultProfile(
-            user.id
-          );
+          await profilesService.createDefaultProfile(user.id);
         },
       },
     },
   },
+
+  logger: {
+    level: "info",
+    log: (level, message, ...args) => {
+      logger.log(level, message, { source: "better-auth", ...args });
+    },
+  },
+
 });
