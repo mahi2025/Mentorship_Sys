@@ -22,20 +22,20 @@ export interface ProfileTable {
   updated_at: Generated<Timestamp>;
 }
 
-export interface role {
+export interface RoleTable {
   id: Generated<number>;
   name: string;
-  description: string;
+  description: string | null;
 
   created_at: Generated<Timestamp>;
   updated_at: Generated<Timestamp>;
 }
 
-export interface user_role{
+export interface UserRoleTable {
   user_id: string;
-  role_id:string;
-  assigned_at:string;
-  assigned_by: string;
+  role_id: string;
+  assigned_at: Generated<Timestamp>;
+  assigned_by: string | null;
 }
 
 export interface ServiceTable {
@@ -82,7 +82,8 @@ export interface PaymentTable {
 
 export interface DB {
   user: UserTable;
-
+  role: RoleTable;
+  user_role: UserRoleTable;
   profile: ProfileTable;
   service: ServiceTable;
   booking: BookingTable;
