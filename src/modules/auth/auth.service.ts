@@ -30,7 +30,7 @@ export class AuthService {
       console.error("Profile creation failed", error);
       throw error;
     }
-    return result.user;
+    return result;
   }
   async getSessionFromHeaders(headers: Headers) {
     return auth.api.getSession({ headers });
