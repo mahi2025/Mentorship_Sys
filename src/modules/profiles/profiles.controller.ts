@@ -4,6 +4,7 @@ import { ProfilesService } from "./profiles.service";
 import { updateProfileSchema } from "./profiles.validation";
 import { ApiResponse } from "../../shared/responses/ApiResponse";
 import { AppError } from "../../shared/errors/AppError";
+import { auth } from "../../auth/auth";
 
 const profilesService = new ProfilesService();
 
