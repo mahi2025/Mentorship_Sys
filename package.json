@@ -20,10 +20,13 @@
     "better-auth": "^1.6.23",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "glob": "^13.0.6",
     "jsonwebtoken": "^9.0.3",
     "kysely": "^0.28.17",
     "pg": "^8.22.0",
+    "rate-limit-redis": "^5.0.0",
+    "redis": "^6.1.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
