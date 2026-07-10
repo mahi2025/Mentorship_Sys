@@ -6,9 +6,11 @@ export const signUpSchema = z.object({
   name: z.string().min(2).optional(),
 });
 
+/*
 export const signInSchema = z.object({
   headline: z.string(),
   bio: z.string().min(8),
 });
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
+*/
