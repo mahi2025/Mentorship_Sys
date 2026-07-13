@@ -1,0 +1,54 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: mentorship-api
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env.docker
+
+    volumes:
+      - .:/src
+      - /src/node_modules
+
+    depends_on:
+      - postgres
+      - redis
+
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17-alpine
+
+    container_name: mentorship-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mahimasre08
+      POSTGRES_DB: mentorship
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8-alpine
+
+    container_name: mentorship-redis
+
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
