@@ -1,24 +1,41 @@
-import { Request, Response, NextFunction } from "express";
+import type { RequestHandler } from "express";
+
+import { UserRoleService } from "../modules/user-roles/user-role.service";
+
+const userRoleService = new UserRoleService();
 
 export const authorize =
-  (...allowedRoles: string[]) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    const userRoles = req.user?.roles;
+  (...allowedRoles: string[]): RequestHandler =>
+  async (req, res, next) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          message: "Unauthorized",
+        });
+      }
 
+      console.log("AUTH USER:", req.user.id);
 
-  if (!userRoles) {
-    return res.status(403).json({
-      message: "Forbidden",
-    });
-  }
+      const userRoles = await userRoleService.getUserRoleNames(req.user.id);
 
-  const allowed = allowedRoles.some((role) => userRoles.includes(role));
+      console.log("USER ROLES:", userRoles);
+      console.log("ALLOWED ROLES:", allowedRoles);
 
-   if (!allowed) {
-     return res.status(403).json({
-       message: "You don't have permission",
-     });
-   }
+      const hasPermission = allowedRoles.some((role) =>
+        userRoles.includes(role),
+      );
 
-   next();
+      if (!hasPermission) {
+        return res.status(403).json({
+          success: false,
+          message: "You don't have permission",
+        });
+      }
+
+      next();
+    } catch (error) {
+      console.error("Authorization error:", error);
+      next(error);
+    }
   };

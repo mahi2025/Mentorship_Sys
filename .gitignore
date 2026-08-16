@@ -1,7 +1,8 @@
-# Dependencies
 node_modules/
-
-# Environment variables
 .env
 .env.*
-.env.docker 
+!.env.example
+.env.docker
+*.log
+dist
+coverage

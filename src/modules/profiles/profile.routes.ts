@@ -1,13 +1,12 @@
-import { Router } from "express";
-import { authenticate } from "../../middleware/authenticate";
-import { getMyProfile, updateMyProfile } from "./profiles.controller";
+import { Router, type IRouter } from "express";
+import { getMyProfile, updateMyProfile } from "./profile.controller";
 
-const router = Router();
+import { authenticate } from "../../middleware/authenticate";
+
+const router: IRouter = Router();
 
 router.get("/me", authenticate, getMyProfile);
 
 router.patch("/me", authenticate, updateMyProfile);
-
-//router.get("/:userId", getProfile);
 
 export default router;

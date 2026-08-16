@@ -10,13 +10,17 @@
     "strict": true,
 
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
 
+    "skipLibCheck": true,
     "resolveJsonModule": true,
 
     "types": ["node"],
+
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"]
 }

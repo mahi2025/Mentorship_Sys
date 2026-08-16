@@ -1,5 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } 
+from "express";
 import { ZodError } from "zod";
+import { z } from "../docs/zod-openapi";
 import { AppError } from "../shared/errors/AppError";
 
 export function errorHandler(

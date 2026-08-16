@@ -1,5 +1,4 @@
 import { auth } from "../auth/auth";
-import type { AuthenticatedUser } from "./auth";
 
 declare global {
   namespace Express {
@@ -9,10 +8,4 @@ declare global {
   }
 }
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: AuthenticatedUser;
-    }
-  }
-}
+export {};

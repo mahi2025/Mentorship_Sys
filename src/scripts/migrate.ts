@@ -1,7 +1,9 @@
+import * as path from "path";
 import { promises as fs } from "node:fs";
-import path from "node:path";
-
-import { Migrator, FileMigrationProvider } from "kysely";
+import { 
+  Migrator,  
+  FileMigrationProvider 
+} from "kysely";
 import { db } from "../config/database";
 
 async function migrate() {
