@@ -13,7 +13,7 @@ const start = async () => {
 
   const app = createApp();
 
-  app.listen(env.PORT, "0.0.0.0" () => {
+  app.listen(env.PORT, "0.0.0.0", () => {
     console.log(`running on port ${env.PORT}`);
   });
 };
