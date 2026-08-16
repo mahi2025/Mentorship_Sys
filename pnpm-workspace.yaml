@@ -1,0 +1,5 @@
+allowBuilds:
+  '@prisma/client': false
+  '@scarf/scarf': false
+  better-sqlite3: false
+  esbuild: true

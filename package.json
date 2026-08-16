@@ -1,0 +1,44 @@
+{
+  "name": "mentorship_sys",
+  "version": "1.0.0",
+  "description": "A scalable backend API for a mentorship platform where mentors can create services, define their availability, receive bookings and Mentees can browse mentors, book sessions,",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "migration:create": "tsx src/scripts/create-migration.ts",
+    "migrate": "tsx src/scripts/migrate.ts",
+    "migrate:auth": "npx @better-auth/cli migrate",
+    "rollback": "tsx src/scripts/rollback.ts",
+    "seed": "tsx src/database/seed.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^9.1.0",
+    "better-auth": "^1.6.23",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "glob": "^13.0.6",
+    "kysely": "^0.28.17",
+    "pg": "^8.22.0",
+    "rate-limit-redis": "^5.0.0",
+    "redis": "^6.1.0",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@better-auth/cli": "^1.4.21",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.0",
+    "@types/pg": "^8.20.0",
+    "@types/swagger-ui-express": "^4.1.8",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
