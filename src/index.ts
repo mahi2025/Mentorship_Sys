@@ -2,7 +2,6 @@ import "./docs/zod-openapi";
 import { env } from "./config/env";
 import { connectDB } from "./config/database";
 import redisClient from "./config/redis";
-import { createApp } from "./App";
 
 const start = async () => {
   await connectDB();
@@ -11,6 +10,7 @@ const start = async () => {
     await redisClient.connect();
   }
 
+  const { createApp } = await import("./App.js");
   const app = createApp();
 
   app.listen(env.PORT, "0.0.0.0", () => {

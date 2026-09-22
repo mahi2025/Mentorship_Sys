@@ -5,6 +5,9 @@ import type { DB } from "../database/schema";
 
 export const pool = new Pool({
   connectionString: env.DATABASE_URL,
+  ssl: env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false }
+    : undefined,
 });
 
 export const db = new Kysely<DB>({
