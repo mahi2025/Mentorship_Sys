@@ -12,10 +12,7 @@ async function rollback() {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(process.cwd(), 
-      "src",
-      "database",
-       "migrations"),
+      migrationFolder: path.join(__dirname, "..", "database", "migrations"),
     }),
   });
 

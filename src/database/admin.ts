@@ -35,7 +35,3 @@ export async function seedAdmin() {
 
   console.log(`Admin role assigned to ${email}`);
 }
-
-seedAdmin()
-  .catch(console.error)
-  .finally(() => db.destroy());

@@ -3,18 +3,19 @@ import { PostgresDialect } from "kysely";
 import { betterAuth } from "better-auth";
 import { ProfilesService } from "../modules/profiles/profile.service";
 import { openAPI } from "better-auth/plugins";
+import { env } from "../config/env";
 
 const profilesService = new ProfilesService();
 
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  secret: env.BETTER_AUTH_SECRET,
+  baseURL: env.BETTER_AUTH_URL,
   database: {
     dialect: new PostgresDialect({ pool }),
     type: "postgres",
     schema: "public",
   },
-  trustedOrigins: ["http://localhost:5000"],
+  trustedOrigins: [env.FRONTEND_URL],
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,

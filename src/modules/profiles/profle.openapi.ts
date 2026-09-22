@@ -7,7 +7,7 @@ registry.register("ProfileResponse", profileResponseSchema);
 
 registry.registerPath({
   method: "patch",
-  path: "/api/profile",
+  path: "/api/profile/me",
 
   tags: ["Profile"],
 

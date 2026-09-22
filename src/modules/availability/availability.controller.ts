@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { AvailabilityService } from "./availability.service";
 import { createAvailabilitySchema } from "./availability.validation";
+import { parsePositiveInt } from "../../shared/validation/params";
 
 const availabilityService = new AvailabilityService();
 
@@ -10,14 +11,7 @@ export async function createAvailability(
   next: NextFunction,
 ) {
   try {
-    const serviceId = Number(req.params.serviceId);
-
-    if (Number.isNaN(serviceId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid service ID",
-      });
-    }
+    const serviceId = parsePositiveInt(req.params.serviceId, "service ID");
 
     const data = createAvailabilitySchema.parse(req.body);
 
@@ -42,14 +36,7 @@ export async function getServiceAvailability(
   next: NextFunction,
 ) {
   try {
-    const serviceId = Number(req.params.serviceId);
-
-    if (Number.isNaN(serviceId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid service ID",
-      });
-    }
+    const serviceId = parsePositiveInt(req.params.serviceId, "service ID");
 
     const availability = await availabilityService.getByService(serviceId);
 

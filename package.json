@@ -8,9 +8,11 @@
     "start": "node dist/index.js",
     "migration:create": "tsx src/scripts/create-migration.ts",
     "migrate": "tsx src/scripts/migrate.ts",
+    "migrate:deploy": "node dist/scripts/migrate.js",
     "migrate:auth": "npx @better-auth/cli migrate",
     "rollback": "tsx src/scripts/rollback.ts",
     "seed": "tsx src/database/seed.ts",
+    "test": "tsx --test",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],

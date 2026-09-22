@@ -27,7 +27,3 @@ export async function seedRoles() {
   }
 }
 
-seedRoles()
-  .catch(console.error)
-  .finally(() => db.destroy());
-

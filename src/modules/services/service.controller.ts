@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { ServiceService } from "./service.service";
 import { createServiceSchema, updateServiceSchema } from "./service.validation";
+import { parsePositiveInt } from "../../shared/validation/params";
 
 const serviceService = new ServiceService();
 
@@ -46,7 +47,9 @@ export async function getServiceById(
   next: NextFunction,
 ) {
   try {
-    const service = await serviceService.getServiceById(Number(req.params.id));
+    const service = await serviceService.getServiceById(
+      parsePositiveInt(req.params.id, "service ID"),
+    );
 
     return res.status(200).json({
       success: true,
@@ -66,7 +69,7 @@ export async function updateService(
     const data = updateServiceSchema.parse(req.body);
 
     const service = await serviceService.updateService(
-      Number(req.params.id),
+      parsePositiveInt(req.params.id, "service ID"),
       req.user!.id,
       data,
     );

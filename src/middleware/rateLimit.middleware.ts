@@ -21,22 +21,34 @@ function rateLimitHandler(req: Request, res: Response){
  
 export function createGlobalLimiter(){
     return rateLimit({
-        windowMs: 10*1000,
-        limit: 3,
+        windowMs: 60 * 1000,
+        limit: 100,
         standardHeaders: true,
         legacyHeaders: false,
         store:createStore("rl:global:"),
         handler: rateLimitHandler,
+        skip: (req) => req.path === "/api/health",
     });
 }
 
 export function createAuthLimiter(){
     return rateLimit({
-        windowMs: 10*1000,
-        limit: 3,
+        windowMs: 15 * 60 * 1000,
+        limit: 10,
         standardHeaders: true,
         legacyHeaders: false,
         store:createStore("rl:auth:"),
+        handler: rateLimitHandler,
+    });
+}
+
+export function createBookingLimiter(){
+    return rateLimit({
+        windowMs: 60 * 1000,
+        limit: 10,
+        standardHeaders: true,
+        legacyHeaders: false,
+        store:createStore("rl:booking:"),
         handler: rateLimitHandler,
     });
 }

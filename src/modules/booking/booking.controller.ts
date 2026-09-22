@@ -6,6 +6,7 @@ import {
 } from "./booking.validation";
 
 import { BookingService } from "./booking.service";
+import { parsePositiveInt } from "../../shared/validation/params";
 
 const bookingService = new BookingService();
 
@@ -15,11 +16,7 @@ export async function createBooking(
   next: NextFunction,
 ) {
   try {
-    const serviceId = Number(req.params.serviceId);
-
-    if (Number.isNaN(serviceId)) {
-      throw new Error("Invalid service ID");
-    }
+    const serviceId = parsePositiveInt(req.params.serviceId, "service ID");
 
     const { timeslot } = createBookingSchema.parse(req.body);
 
@@ -44,11 +41,7 @@ export async function updateBookingStatus(
   next: NextFunction,
 ) {
   try {
-    const bookingId = Number(req.params.bookingId);
-
-    if (Number.isNaN(bookingId)) {
-      throw new Error("Invalid booking ID");
-    }
+    const bookingId = parsePositiveInt(req.params.bookingId, "booking ID");
 
     const { status } = updateBookingStatusSchema.parse(req.body);
 

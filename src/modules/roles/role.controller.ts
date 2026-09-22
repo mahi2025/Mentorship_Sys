@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { RoleService } from "./role.service";
+import { parsePositiveInt } from "../../shared/validation/params";
 
 const roleService = new RoleService();
 
@@ -26,7 +27,7 @@ export async function getRoleById(
   next: NextFunction,
 ) {
   try {
-    const id = Number(req.params.id);
+    const id = parsePositiveInt(req.params.id, "role ID");
 
     const role = await roleService.getRoleById(id);
 

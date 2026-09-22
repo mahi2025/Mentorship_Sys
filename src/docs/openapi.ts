@@ -1,6 +1,8 @@
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 
 import "../modules/profiles/profle.openapi";
+import "../modules/booking/booking.openapi";
+import "../modules/check/health.openapi";
 
 import { registry } from "./registry";
 

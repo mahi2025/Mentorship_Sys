@@ -17,11 +17,13 @@ import bookingRoutes from "./modules/booking/booking.routes";
 
 import swaggerUi from "swagger-ui-express";
 import { openapi } from "./docs/openapi";
+import { env } from "./config/env";
+import { createAuthLimiter } from "./middleware/rateLimit.middleware";
 
 export function createApp(): Express {
   const app: Express = express();
 
-  const allowedOrigins = [process.env.FRONTEND_URL || "http://localhost:3000"];
+  const allowedOrigins = [env.FRONTEND_URL];
 
   app.use(
     cors({
@@ -32,6 +34,7 @@ export function createApp(): Express {
     }),
   );
 
+  app.use("/api/auth", createAuthLimiter());
   app.all("/api/auth/*splat", toNodeHandler(auth));
 
   app.use(express.json());

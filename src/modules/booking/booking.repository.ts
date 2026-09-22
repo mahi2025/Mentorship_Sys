@@ -1,14 +1,19 @@
 import { db } from "../../config/database";
+import type { Kysely } from "kysely";
+import type { DB } from "../../database/schema";
 import type { BookingStatus } from "../../database/schema";
 
 export class BookingRepository {
-  async create(data: {
+  async create(
+    database: Kysely<DB>,
+    data: {
     mentee_id: string;
     service_id: number;
     timeslot: Date;
     status: "pending";
-  }) {
-    return db
+    },
+  ) {
+    return database
       .insertInto("booking")
       .values(data)
       .returningAll()
@@ -20,6 +25,21 @@ export class BookingRepository {
       .selectFrom("booking")
       .selectAll()
       .where("id", "=", id)
+      .executeTakeFirst();
+  }
+
+  async findByIdWithServiceOwner(id: number) {
+    return db
+      .selectFrom("booking")
+      .innerJoin("service", "service.id", "booking.service_id")
+      .select([
+        "booking.id",
+        "booking.mentee_id",
+        "booking.service_id",
+        "booking.status",
+        "service.mentor_id",
+      ])
+      .where("booking.id", "=", id)
       .executeTakeFirst();
   }
 

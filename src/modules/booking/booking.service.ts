@@ -2,6 +2,11 @@ import { AppError } from "../../shared/errors/AppError";
 import { db } from "../../config/database";
 import { BookingRepository } from "./booking.repository";
 import type { BookingStatus } from "../../database/schema";
+import { UserRoleRepository } from "../user-roles/user-role.repository";
+import {
+  assertBookingAccess,
+  validateBookingStart,
+} from "./booking.policy";
 
 function timeToMinutes(time: string): number {
   const [hours, minutes] = time.split(":").map(Number);
@@ -11,99 +16,99 @@ function timeToMinutes(time: string): number {
 
 export class BookingService {
   private bookingRepository = new BookingRepository();
+  private userRoleRepository = new UserRoleRepository();
 
   async createBooking(menteeId: string, serviceId: number, timeslot: Date) {
-    // 1. Find service
-    const service = await db
-      .selectFrom("service")
-      .selectAll()
-      .where("id", "=", serviceId)
-      .executeTakeFirst();
+    validateBookingStart(timeslot);
 
-    if (!service) {
-      throw new AppError("Service not found", 404);
-    }
+    return db.transaction().execute(async (transaction) => {
+      const service = await transaction
+        .selectFrom("service")
+        .selectAll()
+        .where("id", "=", serviceId)
+        .forUpdate()
+        .executeTakeFirst();
 
-    // 2. Calculate booking end
-    const start = new Date(timeslot);
+      if (!service) {
+        throw new AppError("Service not found", 404);
+      }
 
-    const end = new Date(start.getTime() + service.duration * 60 * 1000);
+      const start = new Date(timeslot);
+      const end = new Date(start.getTime() + service.duration * 60 * 1000);
+      const dayOfWeek = start.getUTCDay();
 
-    // 3. Determine day of week
-    const dayOfWeek = start.getDay();
+      const availability = await transaction
+        .selectFrom("availability")
+        .selectAll()
+        .where("service_id", "=", serviceId)
+        .where("day_of_week", "=", dayOfWeek)
+        .execute();
 
-    // 4. Get service availability
-    const availability = await db
-      .selectFrom("availability")
-      .selectAll()
-      .where("service_id", "=", serviceId)
-      .where("day_of_week", "=", dayOfWeek)
-      .execute();
+      if (availability.length === 0) {
+        throw new AppError("Service is not available on this day", 400);
+      }
 
-    if (availability.length === 0) {
-      throw new AppError("Service is not available on this day", 400);
-    }
+      const startMinutes = start.getUTCHours() * 60 + start.getUTCMinutes();
+      const endMinutes = end.getUTCHours() * 60 + end.getUTCMinutes();
+      const fitsAvailability = availability.some((slot) => {
+        const availabilityStart = timeToMinutes(slot.start_time);
+        const availabilityEnd = timeToMinutes(slot.end_time);
 
-    // 5. Check whether the complete duration fits
-    const startMinutes = start.getHours() * 60 + start.getMinutes();
+        return startMinutes >= availabilityStart && endMinutes <= availabilityEnd;
+      });
 
-    const endMinutes = end.getHours() * 60 + end.getMinutes();
+      if (!fitsAvailability) {
+        throw new AppError(
+          "Selected time is outside the mentor's availability",
+          400,
+        );
+      }
 
-    const fitsAvailability = availability.some((slot) => {
-      const availabilityStart = timeToMinutes(slot.start_time);
+      const existingBookings = await transaction
+        .selectFrom("booking")
+        .selectAll()
+        .where("service_id", "=", serviceId)
+        .where("status", "in", ["pending", "confirmed"])
+        .execute();
 
-      const availabilityEnd = timeToMinutes(slot.end_time);
+      const hasConflict = existingBookings.some((booking) => {
+        const existingStart = new Date(booking.timeslot);
+        const existingEnd = new Date(
+          existingStart.getTime() + service.duration * 60 * 1000,
+        );
 
-      return startMinutes >= availabilityStart && endMinutes <= availabilityEnd;
+        return start < existingEnd && end > existingStart;
+      });
+
+      if (hasConflict) {
+        throw new AppError("This time slot is already booked", 409);
+      }
+
+      return this.bookingRepository.create(transaction, {
+        mentee_id: menteeId,
+        service_id: serviceId,
+        timeslot: start,
+        status: "pending",
+      });
     });
+  }
 
-    if (!fitsAvailability) {
-      throw new AppError(
-        "Selected time is outside the mentor's availability",
-        400,
-      );
-    }
-
-    // 6. Check conflicting bookings
-    const existingBookings = await db
-      .selectFrom("booking")
-      .selectAll()
-      .where("service_id", "=", serviceId)
-      .where("status", "in", ["pending", "confirmed"])
-      .execute();
-
-    const hasConflict = existingBookings.some((booking) => {
-      const existingStart = new Date(booking.timeslot);
-
-      const existingEnd = new Date(
-        existingStart.getTime() + service.duration * 60 * 1000,
-      );
-
-      return start < existingEnd && end > existingStart;
-    });
-
-    if (hasConflict) {
-      throw new AppError("This time slot is already booked", 409);
-    }
-
-    // 7. Create pending booking
-    return this.bookingRepository.create({
-      mentee_id: menteeId,
-      service_id: serviceId,
-      timeslot: start,
-      status: "pending",
-    });
-}
   async updateStatus(
     bookingId: number,
     newStatus: BookingStatus,
     userId: string,
   ) {
-    const booking = await this.bookingRepository.findById(bookingId);
+    const booking = await this.bookingRepository.findByIdWithServiceOwner(
+      bookingId,
+    );
 
     if (!booking) {
       throw new AppError("Booking not found", 404);
     }
+
+    const roles = await this.userRoleRepository.findRolesByUserId(userId);
+    const roleNames = roles.map((role) => role.name);
+    assertBookingAccess(booking, roleNames, userId, newStatus);
 
     /*
      * Status lifecycle:
