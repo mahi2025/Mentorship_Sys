@@ -1,8 +1,7 @@
 {
   "name": "mentorship_sys",
   "version": "1.0.0",
-  "description": "A scalable backend API for a mentorship platform where mentors can create services, define their availability, receive bookings and Mentees can browse mentors, book sessions,",
-  "scripts": {
+  "description": "REST API for a mentorship system",  "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
