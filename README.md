@@ -1,7 +1,7 @@
 
 # Mentorship System
 
-REST API for a mentorship system and mentors publish services and availability, mentees book session and administrators manage users and roles
+REST API for a mentorship system mentors publish services and availability, mentees book session and administrators manage users and roles
 
 ## Stack
 
@@ -35,11 +35,6 @@ cd <Mentorship_Sys>
 ```bash
 pnpm install
 ```
-
-run on  `http://localhost:5000`
-
-
-API documentation is available at `http://localhost:5000/docs`
 
 
 ## Setup Environment Variables
@@ -85,4 +80,5 @@ Server runs at:
 http://localhost:5000
 ```
 
+API documentation is available at `http://localhost:5000/docs`
 
